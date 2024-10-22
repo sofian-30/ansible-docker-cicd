@@ -1,0 +1,20 @@
+---
+- hosts: webserver
+  become: true
+  tasks:
+    - name: Installer Docker (si non installé)
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Démarrer Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Construire et démarrer le conteneur Docker
+      shell: |
+        cd /mnt/c/Users/ouass/ansible-docker-cicd
+        docker build -t flask-app .
+        docker run -d -p 5000:5000 flask-app
